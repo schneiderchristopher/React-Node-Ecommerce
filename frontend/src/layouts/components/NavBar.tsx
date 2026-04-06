@@ -1,11 +1,9 @@
 import { SwordIcon } from "lucide-react"
 import { useLocation, NavLink } from "react-router-dom";
+import { useCart } from "../../hooks/useCart";
 
-interface NavBarProps {
-    cartLength: number;
-}
-
-export default function NavBar({ cartLength }: NavBarProps) {
+export default function NavBar() {
+    const { cart } = useCart();
     const location = useLocation();
     return (
         <nav className="bg-zinc-950 border-b border-zinc-800 sticky top-0 z-50">
@@ -26,7 +24,7 @@ export default function NavBar({ cartLength }: NavBarProps) {
                         to="/cart"
                         className={`text-xs uppercase tracking-widest relative transition-colors ${location.pathname === '/cart' ? 'text-white font-bold' : 'text-zinc-500 hover:text-zinc-300'}`}
                     >
-                        Archive ({cartLength})
+                        Archive ({cart.length})
                     </NavLink>
                     <NavLink
                         to="/admin"
