@@ -18,19 +18,19 @@ export default function NavBar() {
                         to="/"
                         className={`text-xs uppercase tracking-widest transition-colors ${location.pathname === '/' ? 'text-white font-bold' : 'text-zinc-500 hover:text-zinc-300'}`}
                     >
-                        Collection
+                        Coleção
                     </NavLink>
                     <NavLink
                         to="/cart"
                         className={`text-xs uppercase tracking-widest relative transition-colors ${location.pathname === '/cart' ? 'text-white font-bold' : 'text-zinc-500 hover:text-zinc-300'}`}
                     >
-                        Archive ({cart.length})
+                        Carrinho ({cart.length})
                     </NavLink>
                     <NavLink
                         to="/admin"
                         className={`text-xs uppercase tracking-widest transition-colors ${location.pathname === '/admin' ? 'text-white font-bold' : 'text-zinc-500 hover:text-zinc-300'}`}
                     >
-                        Control
+                        Administrativo
                     </NavLink>
                 </div>
             </div>
