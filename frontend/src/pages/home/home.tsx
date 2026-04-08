@@ -26,7 +26,7 @@ const productsMock: Product[] = [
     },
 ];
 
-export default function Home() {
+export default function HomePage() {
     return (
         <main className="max-w-7xl mx-auto p-6 md:p-12">
             <div className="space-y-20">
