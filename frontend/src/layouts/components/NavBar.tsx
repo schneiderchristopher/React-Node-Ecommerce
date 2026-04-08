@@ -27,8 +27,8 @@ export default function NavBar() {
                         Carrinho ({totalItems})
                     </NavLink>
                     <NavLink
-                        to="/admin"
-                        className={`text-xs uppercase tracking-widest transition-colors ${location.pathname === '/admin' ? 'text-white font-bold' : 'text-zinc-500 hover:text-zinc-300'}`}
+                        to="/dashboard"
+                        className={`text-xs uppercase tracking-widest transition-colors ${location.pathname === '/dashboard' ? 'text-white font-bold' : 'text-zinc-500 hover:text-zinc-300'}`}
                     >
                         Administrativo
                     </NavLink>
