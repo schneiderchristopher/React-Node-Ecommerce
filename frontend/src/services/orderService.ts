@@ -4,6 +4,7 @@ export type OrderItem = { product_id: number; quantity: number };
 export type Order = {
     id: number;
     client_id: string;
+    delivery_date: string;
     status: 'pending' | 'confirmed';
     items: OrderItem[];
 };
@@ -11,7 +12,7 @@ export type Order = {
 export const orderService = {
     getAll: () => api.get<Order[]>("/orders"),
 
-    create: (orderData: Omit<Order, "id" | "status">) =>
+    create: (orderData: Omit<Order, "id" | "status" | "delivery_date">) =>
         api.post<{ id: number; delivery_date: string; message: string }>("/orders", orderData),
 
     confirm: (id: number) =>
