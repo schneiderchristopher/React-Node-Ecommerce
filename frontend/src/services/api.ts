@@ -30,6 +30,20 @@ export const api = {
     return response.json();
   },
 
+  async patch<T>(endpoint: string, data: any): Promise<T | void> {
+    const response = await fetch(`${API_URL}${endpoint}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: data ? JSON.stringify(data) : undefined,
+    });
+
+    if (!response.ok) throw new Error(`Erro: ${response.status}`);
+
+    if (response.status === 204) return;
+
+    return response.json();
+  },
+
   async delete<T>(endpoint: string): Promise<T> {
     const response = await fetch(`${API_URL}${endpoint}`, {
       method: "DELETE",
