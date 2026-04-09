@@ -23,7 +23,7 @@ export async function getDb() {
 
     CREATE TABLE IF NOT EXISTS Orders (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      customer_id TEXT NOT NULL,
+      client_id TEXT NOT NULL,
       delivery_date TEXT NOT NULL,
       status TEXT CHECK( status IN ('pending', 'confirmed') ) NOT NULL DEFAULT 'pending'
     );
