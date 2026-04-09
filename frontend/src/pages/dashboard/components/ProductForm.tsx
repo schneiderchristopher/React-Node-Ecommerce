@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { X } from "lucide-react";
 import type Product from "../../../models/Product";
+import { useProduct } from "../../../hooks/useProduct";
 
 type ProductFormProps = {
     editingProduct: Product | null;
@@ -8,11 +9,13 @@ type ProductFormProps = {
 };
 
 export function ProductForm({ editingProduct, onClearEdit }: ProductFormProps) {
+    const { addProduct, updateProduct } = useProduct();
+
     const [formData, setFormData] = useState({
         name: "",
         price: "",
         description: "",
-        imageUrl: "",
+        imageUrl: ""
     });
 
     useEffect(() => {
@@ -21,7 +24,7 @@ export function ProductForm({ editingProduct, onClearEdit }: ProductFormProps) {
                 name: editingProduct.name,
                 price: editingProduct.price.toString(),
                 description: editingProduct.description,
-                imageUrl: editingProduct.imageUrl,
+                imageUrl: editingProduct.imageUrl
             });
         } else {
             setFormData({ name: "", price: "", description: "", imageUrl: "" });
@@ -30,7 +33,20 @@ export function ProductForm({ editingProduct, onClearEdit }: ProductFormProps) {
 
     const handleSubmit = async (e: React.SubmitEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Form Data:", formData);
+
+        const productPayload = {
+            name: formData.name,
+            price: parseFloat(formData.price),
+            description: formData.description,
+            imageUrl: formData.imageUrl
+        };
+
+        if (editingProduct && editingProduct.id) {
+            await updateProduct(editingProduct.id, productPayload);
+        } else {
+            await addProduct(productPayload);
+        }
+
         onClearEdit();
     };
 

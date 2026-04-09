@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect, useMemo } from "react";
 import type Product from "../models/Product";
+import { productService } from "../services/productService";
 
 const MOCK_PRODUCTS: Product[] = [
     {
@@ -29,8 +30,9 @@ type ProductContextType = {
     products: Product[];
     loading: boolean;
     error: string | null;
-    refreshProducts: () => Promise<void>;
-    getProductById: (id: number) => Product | undefined;
+    addProduct: (product: Omit<Product, "id">) => Promise<void>;
+    updateProduct: (id: number, product: Omit<Product, "id">) => Promise<void>;
+    deleteProduct: (id: number) => Promise<void>;
 };
 
 export const ProductContext = createContext<ProductContextType | null>(null);
@@ -42,10 +44,10 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
 
     const fetchProducts = async () => {
         setLoading(true);
-        // TODO: Chamada da API para buscar produtos
         setError(null);
         try {
-            setProducts(MOCK_PRODUCTS);
+            const data = await productService.getAll();
+            setProducts(data);
         } catch (err) {
             setError("Falha ao carregar produtos.");
         } finally {
@@ -53,20 +55,50 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
         }
     };
 
+    const addProduct = async (productData: Omit<Product, "id">) => {
+        try {
+            const response = await productService.create(productData);
+            const newProduct = { id: response.id, ...productData };
+            setProducts((prev) => [...prev, newProduct]);
+        } catch (err) {
+            console.error(err);
+            alert("Erro ao criar produto");
+        }
+    };
+
+    const updateProduct = async (id: number, productData: Omit<Product, "id">) => {
+        try {
+            await productService.update(id, productData);
+            setProducts((prev) => prev.map(p =>
+                p.id === id ? { id, ...productData } : p
+            ));
+        } catch (err) {
+            console.error(err);
+            alert("Erro ao atualizar produto");
+        }
+    };
+
+    const deleteProduct = async (id: number) => {
+        try {
+            await productService.remove(id);
+            setProducts((prev) => prev.filter(p => p.id !== id));
+        } catch (err) {
+            console.error(err);
+            alert("Erro ao deletar produto");
+        }
+    };
+
     useEffect(() => {
         fetchProducts();
     }, []);
-
-    const getProductById = (id: number) => {
-        return products.find(p => p.id === id);
-    };
 
     const value = useMemo(() => ({
         products,
         loading,
         error,
-        refreshProducts: fetchProducts,
-        getProductById
+        addProduct,
+        updateProduct,
+        deleteProduct
     }), [products, loading, error]);
 
     return (
